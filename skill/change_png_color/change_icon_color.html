@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="../css/demo.css" type="text/css">
+    <link rel="stylesheet" href="../css/hl.css" type="text/css">
+    <link rel="stylesheet" href="http://qidian.gtimg.com/lulu/theme/modern/css/common/ui/Color.css">
+    <style>
+        p {
+            margin: 20px 0 5px;
+            font-size: 14px;
+        }
+        a:hover {
+            text-decoration: none;
+        }
+        .remind {
+            display: inline-block;
+            font-size: 14px;
+            font-family: 'microsoft yahei';
+            margin-top: 80px;
+            padding: 5px;
+            background-color: #f0f3f9;
+        }
+        .icon {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            overflow: hidden;
+        }
+        .icon-del {
+            background: url(imgs/delete.png) no-repeat center;
+        }
+        .icon > .icon {
+            position: relative;
+            left: -20px;
+            border-right: 20px solid transparent;
+            -webkit-filter: drop-shadow(20px 0);
+            filter: drop-shadow(20px 0);
+        }
+    </style>
+</head>
+<body>
+<div id="effect" class="part">
+    <h3>效果：</h3>
+    <div class="show">
+        <div class="demo">
+            <p><strong>原始图标</strong></p>
+            <i class="icon icon-del"></i>
+            <p><strong>可以变色的图标</strong></p>
+            <i class="icon"><i id="iconDel" class="icon icon-del"></i></i>
+            <p>修改颜色：
+                <label class="ui_color_track" for="iconColor">
+                    <span class="ui_color_thumb" style="background-color: rgb(0, 153, 102);"></span>
+                </label>
+                <input type="color" id="iconColor" class="ui_color_input" readonly="">
+            </p>
+            <p class="remind">上面的颜色选择器由lulu UI友情支持！</p>
+
+            <div>
+                <h3>原理其实很简单</h3>
+                <pre>
+    原理其实很简单，使用了CSS3滤镜filter中的drop-shadow，drop-shadow滤镜可以给元素或图片非透明区域添加投影。
+
+    如果对drop-shadow不是很了解，建议先看看前些时间写的“CSS3 filter:drop-shadow滤镜与box-shadow区别应用”一文！
+
+    对于背景透明的png小图标而言，如果我们施加一个不带模糊的投影，不就等同于生成了另外一个颜色的小图标了吗？
+
+    然后，我们把原始图标隐藏在容器外面，投影图标在容器中间，不见给人感觉是赋色效果了？
+
+    比方说本文的demo，如果把icon父级的的overflow:hidden去掉，原始的图标就暴露出来啦！
+                </pre>
+                <h3>实现的时候实际有难度</h3>
+                <pre>
+    原理如上面，我一开始实现的时候，以为很简单，因为分分钟可以实现自己的想法，后来发现有些天真了，Chrome浏览器怎么都显示不出来；FireFox浏览器却可以！咦，究竟发生了什么。
+
+    在Chrome浏览器下，drop-shadow有一个如下的呈现特性：
+
+    在Chrome浏览器下，如果一个元素的主体部分，无论以何种方式，只要在页面中不可见，其drop-shadow是不可见的；实体部分哪怕有1像素可见，则drop-shadow完全可见。
+
+    所以，我试过：
+
+    text-indent负值隐藏原始图，无投影，失败！
+    clip剪裁隐藏，无投影，失败！
+    margin负值隐藏原始图，无投影，失败！
+    left负值隐藏原始图，无投影，失败！
+    通通不行，实现遇到了巨大的阻碍。
+
+    后来，灵光一现，如果我实体部分也在可视区域内，但是是透明的，会怎样呢（反正不会有投影出来）？
+
+    于是，我就试了下曾经立下无数战功的透明边框，卧槽，又立功了，成了！
+
+    因此，下面这一个CSS声明是千万不能少的：
+
+    border-right: 20px solid transparent;
+                </pre>
+                <h3>关于兼容性</h3>
+                <pre>
+    IE10+支持，Chrome和FireFox浏览器支持，移动端iOS支持，Android4.4+支持。也就是，基本上，移动端现在可以使用这种技术了。
+
+    既节约了流量，也让我们的开发更简单，维护更方便了。
+                </pre>
+            </div>
+        </div>
+    </div>
+</div>
+    <script src="js/sea.js"></script>
+    <script>
+        seajs.config({
+            base: 'http://qidian.gtimg.com/lulu/theme/modern/js'
+        });
+        seajs.use(['common/ui/Color.js'], function(Color) {
+            var elIconDel = $('#iconDel');
+            new Color($('#iconColor').change(function() {
+                var dropShadow = 'drop-shadow(20px 0 '+ this.value +')';
+                elIconDel.css({
+                    webkitFilter: dropShadow,
+                    filter: dropShadow
+                });
+            }));
+        });
+    </script>
+</body>
+</html>

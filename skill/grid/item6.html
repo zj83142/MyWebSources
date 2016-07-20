@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>第六种 grid</title>
+    <style type="text/css">
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .float {
+            width: 500px;
+            overflow: hidden;
+            margin: 10px;
+            float: left;
+        }
+
+        .item {
+            background: #f55;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+
+        .item {
+            padding-top: 33.3%;
+            float: left;
+            width: 33.3%;
+            border-right: 1px solid #fff;
+            border-top: 1px solid #fff;
+            font-size: 0;
+        }
+        .item:nth-child(1) {
+            padding-top: 66.6%;
+            width: 66.6%;
+        }
+        .item:nth-child(2), .item:nth-child(3), .item:nth-child(6) {
+            border-right: 0 none;
+        }
+        .item:nth-child(1), .item:nth-child(2) {
+            border-top: 0 none;
+        }
+
+
+
+        .flex, .item {
+            background: #f55;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+
+        .wrap {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            width: 500px;
+            overflow: hidden;
+            margin: 10px;
+        }
+
+        .inner {
+            -webkit-box-flex: 1;
+            display: -webkit-box;
+            overflow: hidden;
+        }
+
+        .flex {
+            -webkit-box-flex: 1;
+            margin-right: 1px;
+            margin-bottom: 1px;
+            padding-top: 33.3%;
+            font-size: 0;
+            position: relative;
+        }
+
+
+        .wrap .inner:nth-child(1) .box1 {
+            padding-top: 66.6%;
+            width: 66.6%;
+        }
+        .wrap .box2 {
+            display: -webkit-box;
+            width: 33.3%;
+            -webkit-box-orient: vertical;
+        }
+        .wrap .box2 .flex {
+            padding-top: 33.3%;
+        }
+
+        .inner:nth-child(2) .flex:nth-child(3) {
+            margin-right: 0;
+        }
+        .inner:nth-child(2) .box3 .flex:nth-child(2) {
+            margin-right: 1px;
+        }
+
+        .box2 .flex {
+            margin-right: 0;
+        }
+
+        .inner:nth-child(2) .flex {
+            margin-bottom: 0;
+        }
+
+
+    </style>
+</head>
+<body>
+
+<div class="float">
+    <div class="item">1</div>
+    <div class="item">2</div>
+    <div class="item">3</div>
+    <div class="item">4</div>
+    <div class="item">5</div>
+    <div class="item">6</div>
+</div>
+
+<div class="wrap">
+    <div class="inner">
+        <div class="flex box1">1</div>
+        <div class="box2">
+            <div class="flex">2</div>
+            <div class="flex">3</div>
+        </div>
+    </div>
+    <div class="inner">
+        <div class="flex">4</div>
+        <div class="flex">5</div>
+        <div class="flex">6</div>
+    </div>
+</div>
+
+</body>
+</html>
